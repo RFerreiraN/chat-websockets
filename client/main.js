@@ -16,6 +16,7 @@ form.addEventListener('submit', (e) => {
 const mensajes = document.getElementById('mensajes')
 
 socket.on('chat message', (msg) => {
-  const li = `<li>${msg}</li>`
-  mensajes.insertAdjacentElement('beforeend', li)
+  const li = document.createElement('li')
+  li.textContent = msg
+  mensajes.appendChild(li)
 })
