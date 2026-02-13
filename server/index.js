@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
       })
     } catch (error) {
       console.error(error)
+      return
     }
 
     io.emit('chat message', msg, result.lastInsertRowid.toString())
