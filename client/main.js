@@ -24,4 +24,6 @@ socket.on('chat message', (msg, serverOffset) => {
   li.textContent = msg
   mensajes.appendChild(li)
   socket.auth.serverOffset = serverOffset
+
+  mensajes.scrollTop = mensajes.scrollHeight
 })
