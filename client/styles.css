@@ -15,7 +15,7 @@ body {
 }
 
 #chat {
-  display: flex;
+  display: none;
   flex-direction: column;
   width: 400px;
   height: 550px;

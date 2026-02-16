@@ -10,6 +10,36 @@
 </head>
 
 <body>
+
+  <section id="autenticacion">
+    <button type="button" id="botonSesion" class="btn btn-danger" data-bs-toggle="modal"
+      data-bs-target="#modalEstatico">
+      Inicio de sesión
+    </button>
+
+    <div class="modal fade" id="modalEstatico" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Introduce tu nombre</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <form id="authForm">
+            <div class="modal-body">
+              <input type="text" class="form-control" id="nombre" placeholder="Ej. Pablo" required>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
   <section id="chat">
     <ul id="mensajes"></ul>
     <form id="form">

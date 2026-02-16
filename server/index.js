@@ -27,7 +27,7 @@ await db.execute(`
   )
 `)
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log('un usuario se ha conectado!!')
 
   socket.on('disconnect', () => {
@@ -48,6 +48,21 @@ io.on('connection', (socket) => {
 
     io.emit('chat message', msg, result.lastInsertRowid.toString())
   })
+
+  if (!socket.recovered) { // Para recuperar todos los datos cuando un nuevo usuario se conecte
+    try {
+      const results = await db.execute({
+        sql: 'SELECT id, content FROM mensajes WHERE id > ?',
+        args: [socket.handshake.auth.serverOffset ?? 0]
+      })
+
+      results.rows.forEach(row => {
+        socket.emit('chat message', row.content, row.id)
+      })
+    } catch (error) {
+      console.error('Error recuperando los mensajes', error)
+    }
+  }
 })
 
 app.use(logger('dev'))

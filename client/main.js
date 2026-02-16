@@ -5,6 +5,8 @@ const socket = io({
     serverOffset: 0
   }
 })
+
+const chat = document.getElementById('chat')
 const form = document.getElementById('form')
 const input = document.getElementById('input')
 
@@ -26,4 +28,35 @@ socket.on('chat message', (msg, serverOffset) => {
   socket.auth.serverOffset = serverOffset
 
   mensajes.scrollTop = mensajes.scrollHeight
+})
+
+/* Codigo de autenticación */
+
+const authForm = document.getElementById('authForm')
+const nombre = document.getElementById('nombre')
+const botonSesion = document.getElementById('botonSesion')
+
+const dataLocaStorage = JSON.parse(localStorage.getItem('usuario') || '[]')
+
+authForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  const nombreValido = nombre.value.trim()
+  if (!nombreValido) return false
+
+  const usuarios = dataLocaStorage
+  if (!usuarios.includes(nombreValido)) {
+    usuarios.push(nombreValido)
+  }
+
+  localStorage.setItem('usuario', JSON.stringify(usuarios))
+
+  nombre.value = ''
+
+  const modalElement = document.getElementById('modalEstatico')
+  const modal = bootstrap.Modal.getInstance(modalElement)
+  modal.hide()
+
+  chat.style.display = 'flex'
+  botonSesion.style.display = 'none'
 })
