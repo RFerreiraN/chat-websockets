@@ -15,7 +15,7 @@ body {
 }
 
 #chat {
-  display: none;
+  display: flex;
   flex-direction: column;
   width: 400px;
   height: 550px;
@@ -122,4 +122,8 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.oculto {
+  display: none !important;
 }

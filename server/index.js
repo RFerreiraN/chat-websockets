@@ -23,7 +23,8 @@ const db = createClient({
 await db.execute(`
   CREATE TABLE IF NOT EXISTS mensajes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    content TEXT
+    content TEXT,
+    username TEXT
   )
 `)
 
@@ -36,28 +37,29 @@ io.on('connection', async (socket) => {
 
   socket.on('chat message', async (msg) => {
     let result
+    const username = socket.handshake.auth.username ?? 'Desconocido'
     try {
       result = await db.execute({
-        sql: 'INSERT INTO mensajes (content) VALUES (:msg)',
-        args: { msg }
+        sql: 'INSERT INTO mensajes (content, username) VALUES (:msg, :username)',
+        args: { msg, username }
       })
     } catch (error) {
       console.error(error)
       return
     }
 
-    io.emit('chat message', msg, result.lastInsertRowid.toString())
+    io.emit('chat message', msg, result.lastInsertRowid.toString(), username)
   })
 
   if (!socket.recovered) { // Para recuperar todos los datos cuando un nuevo usuario se conecte
     try {
       const results = await db.execute({
-        sql: 'SELECT id, content FROM mensajes WHERE id > ?',
+        sql: 'SELECT id, content, username FROM mensajes WHERE id > ?',
         args: [socket.handshake.auth.serverOffset ?? 0]
       })
 
       results.rows.forEach(row => {
-        socket.emit('chat message', row.content, row.id)
+        socket.emit('chat message', row.content, row.id, row.username)
       })
     } catch (error) {
       console.error('Error recuperando los mensajes', error)
