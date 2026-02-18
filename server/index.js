@@ -48,7 +48,7 @@ io.on('connection', async (socket) => {
       return
     }
 
-    io.emit('chat message', msg, result.lastInsertRowid.toString(), username)
+    io.emit('chat message', msg, result.lastInsertRowid.toString(), username, socket.id)
   })
 
   if (!socket.recovered) { // Para recuperar todos los datos cuando un nuevo usuario se conecte

@@ -119,22 +119,22 @@ function iniciarSocket(username) {
   })
 
   // Recibir mensaje
-  socket.on('chat message', (msg, serverOffset, username) => {
-    const mensaje = `
-    <li>
-      <p>
-        <small>
-          <strong>
-            ${username}
-          </strong>
-        </small>
-      </p>
-        ${msg}
-    </li>`
-    mensajes.insertAdjacentHTML('beforeend', mensaje)
+  socket.on('chat message', (msg, serverOffset, username, idUser) => {
+    const li = document.createElement('li')
+    li.innerHTML = `
+    <p><small><strong>${username}</strong></small></p>
+    ${msg}
+  `
+    if (idUser === socket.id) {
+      li.classList.add('mi-mensaje')
+    } else {
+      li.classList.add('mensaje-otro')
+    }
+
+    mensajes.appendChild(li)
+    mensajes.scrollTop = mensajes.scrollHeight
 
     socket.auth.serverOffset = serverOffset
-    mensajes.scrollTop = mensajes.scrollHeight
   })
 }
 
